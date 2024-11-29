@@ -31,7 +31,8 @@ public class ProductEntity {
     @Column(nullable = true)
     public Double rating;
 
-    @Column(name = "category_id")
-    public Integer categoryId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = false)
+    public CategoryEntity category;
 
 }
