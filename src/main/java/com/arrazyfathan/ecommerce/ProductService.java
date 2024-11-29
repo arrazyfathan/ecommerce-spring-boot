@@ -19,4 +19,13 @@ public class ProductService {
         Page<ProductEntity> products = productRepository.findAll(pageRequest);
         return products.toList();
     }
+
+    public Page<ProductEntity> getProducts(
+            Integer pageNumber,
+            Integer pageSize
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        Page<ProductEntity> products = productRepository.findAll(pageRequest);
+        return products;
+    }
 }
