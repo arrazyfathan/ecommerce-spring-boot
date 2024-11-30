@@ -1,4 +1,4 @@
-package com.arrazyfathan.ecommerce;
+package com.arrazyfathan.ecommerce.response;
 
 import lombok.Data;
 

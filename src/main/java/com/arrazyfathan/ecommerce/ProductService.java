@@ -1,6 +1,7 @@
 package com.arrazyfathan.ecommerce;
 
 import com.arrazyfathan.ecommerce.entity.ProductEntity;
+import com.arrazyfathan.ecommerce.response.PagingInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,26 +15,26 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public Page<ProductEntity> getProducts(
+    public PagingInfo<ProductEntity> getProducts(
             Integer pageNumber,
             Integer pageSize
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         Page<ProductEntity> products = productRepository.findAll(pageRequest);
-        return products;
+        return PagingInfo.convertFromPage(products);
     }
 
-    public Page<ProductEntity> getProducts(
+    public PagingInfo<ProductEntity> getProducts(
             Integer pageNumber,
             Integer pageSize,
             String query
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         Page<ProductEntity> products = productRepository.filter(query, pageRequest);
-        return products;
+        return PagingInfo.convertFromPage(products);
     }
 
-    public Page<ProductEntity> getProducts(
+    public PagingInfo<ProductEntity> getProducts(
             Integer pageNumber,
             Integer pageSize,
             String query,
@@ -41,16 +42,16 @@ public class ProductService {
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         Page<ProductEntity> products = productRepository.filter(query, categoryId, pageRequest);
-        return products;
+        return PagingInfo.convertFromPage(products);
     }
 
-    public Page<ProductEntity> getProducts(
+    public PagingInfo<ProductEntity> getProducts(
             Integer pageNumber,
             Integer pageSize,
             Integer categoryId
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         Page<ProductEntity> products = productRepository.filter(categoryId, pageRequest);
-        return products;
+        return PagingInfo.convertFromPage(products);
     }
 }

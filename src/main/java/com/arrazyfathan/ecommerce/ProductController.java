@@ -1,6 +1,9 @@
 package com.arrazyfathan.ecommerce;
 
 import com.arrazyfathan.ecommerce.entity.ProductEntity;
+import com.arrazyfathan.ecommerce.response.BaseResponsePagination;
+import com.arrazyfathan.ecommerce.response.Pagination;
+import com.arrazyfathan.ecommerce.response.PagingInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,31 +27,19 @@ public class ProductController {
             @RequestParam(required = false) String q,
             @RequestParam(required = false) Integer categoryId
     ) {
-        List<ProductEntity> producstList;
-
         String key = (q == null ? "NQ" : "Q") + (categoryId == null ? "NC" : "C");
 
-        Page<ProductEntity> productsPage = switch (key) {
+        PagingInfo<ProductEntity> productsPage = switch (key) {
             case "NQC" -> productService.getProducts(page, size, categoryId);
             case "QNC" -> productService.getProducts(page, size, q);
             case "QC" -> productService.getProducts(page, size, q, categoryId);
             default -> productService.getProducts(page, size);
         };
 
-
-        producstList = productsPage.getContent();
-
-        Pagination pagination = new Pagination();
-        pagination.setCurrentPage(page);
-        pagination.setTotalPage(productsPage.getTotalPages());
-        pagination.setPageSize(size);
-        pagination.setTotalItems(productsPage.getTotalElements());
-
         BaseResponsePagination response = new BaseResponsePagination();
         response.setMessage("Success");
         response.setStatus(true);
-        response.setData(producstList);
-        response.setPagination(pagination);
+        response.setData(productsPage);
         return response;
     }
 

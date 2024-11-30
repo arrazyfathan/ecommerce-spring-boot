@@ -1,9 +1,9 @@
-package com.arrazyfathan.ecommerce;
+package com.arrazyfathan.ecommerce.response;
 
 import lombok.Data;
 
 @Data
-public class BaseResponse {
+public class BaseResponsePagination {
     public Boolean status;
     public String message;
     public Object data;

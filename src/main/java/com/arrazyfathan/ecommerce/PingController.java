@@ -1,5 +1,6 @@
 package com.arrazyfathan.ecommerce;
 
+import com.arrazyfathan.ecommerce.response.BaseResponse;
 import com.arrazyfathan.ecommerce.response.Pong;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
