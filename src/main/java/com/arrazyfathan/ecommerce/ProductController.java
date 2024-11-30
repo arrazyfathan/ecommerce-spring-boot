@@ -21,18 +21,20 @@ public class ProductController {
     BaseResponsePagination getProducts(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String q
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Integer categoryId
     ) {
-
-
-        Page<ProductEntity> productsPage;
         List<ProductEntity> producstList;
 
-        if (q == null) {
-            productsPage = productService.getProducts(page, size);
-        } else  {
-            productsPage = productService.getProducts(page, size, q);
-        }
+        String key = (q == null ? "NQ" : "Q") + (categoryId == null ? "NC" : "C");
+
+        Page<ProductEntity> productsPage = switch (key) {
+            case "NQC" -> productService.getProducts(page, size, categoryId);
+            case "QNC" -> productService.getProducts(page, size, q);
+            case "QC" -> productService.getProducts(page, size, q, categoryId);
+            default -> productService.getProducts(page, size);
+        };
+
 
         producstList = productsPage.getContent();
 

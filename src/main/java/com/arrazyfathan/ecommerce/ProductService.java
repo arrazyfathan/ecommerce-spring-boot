@@ -26,10 +26,31 @@ public class ProductService {
     public Page<ProductEntity> getProducts(
             Integer pageNumber,
             Integer pageSize,
-            String name
+            String query
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        Page<ProductEntity> products = productRepository.findByNameContainingIgnoreCase(name, pageRequest);
+        Page<ProductEntity> products = productRepository.filter(query, pageRequest);
+        return products;
+    }
+
+    public Page<ProductEntity> getProducts(
+            Integer pageNumber,
+            Integer pageSize,
+            String query,
+            Integer categoryId
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        Page<ProductEntity> products = productRepository.filter(query, categoryId, pageRequest);
+        return products;
+    }
+
+    public Page<ProductEntity> getProducts(
+            Integer pageNumber,
+            Integer pageSize,
+            Integer categoryId
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        Page<ProductEntity> products = productRepository.filter(categoryId, pageRequest);
         return products;
     }
 }
