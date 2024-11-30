@@ -14,18 +14,22 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<ProductEntity> getTopThree() {
-        PageRequest pageRequest = PageRequest.of(0, 3);
-        Page<ProductEntity> products = productRepository.findAll(pageRequest);
-        return products.toList();
-    }
-
     public Page<ProductEntity> getProducts(
             Integer pageNumber,
             Integer pageSize
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         Page<ProductEntity> products = productRepository.findAll(pageRequest);
+        return products;
+    }
+
+    public Page<ProductEntity> getProducts(
+            Integer pageNumber,
+            Integer pageSize,
+            String name
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        Page<ProductEntity> products = productRepository.findByNameContainingIgnoreCase(name, pageRequest);
         return products;
     }
 }

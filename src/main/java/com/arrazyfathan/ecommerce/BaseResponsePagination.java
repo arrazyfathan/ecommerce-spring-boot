@@ -7,5 +7,5 @@ public class BaseResponsePagination {
     public Boolean status;
     public String message;
     public Object data;
-    public Object pagination;
+    public Pagination pagination;
 }
