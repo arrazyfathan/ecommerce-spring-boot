@@ -1,4 +1,4 @@
-package com.arrazyfathan.ecommerce.entity;
+package com.arrazyfathan.ecommerce.data.entity;
 
 
 import jakarta.persistence.*;

@@ -1,17 +1,14 @@
-package com.arrazyfathan.ecommerce;
+package com.arrazyfathan.ecommerce.controller;
 
-import com.arrazyfathan.ecommerce.entity.ProductEntity;
-import com.arrazyfathan.ecommerce.response.BaseResponsePagination;
-import com.arrazyfathan.ecommerce.response.Pagination;
-import com.arrazyfathan.ecommerce.response.PagingInfo;
+import com.arrazyfathan.ecommerce.data.entity.ProductEntity;
+import com.arrazyfathan.ecommerce.data.response.BaseResponsePagination;
+import com.arrazyfathan.ecommerce.data.response.PagingInfo;
+import com.arrazyfathan.ecommerce.service.ProductService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")

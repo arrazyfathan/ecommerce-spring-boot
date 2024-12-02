@@ -1,13 +1,12 @@
-package com.arrazyfathan.ecommerce;
+package com.arrazyfathan.ecommerce.service;
 
-import com.arrazyfathan.ecommerce.entity.ProductEntity;
-import com.arrazyfathan.ecommerce.response.PagingInfo;
+import com.arrazyfathan.ecommerce.repository.ProductRepository;
+import com.arrazyfathan.ecommerce.data.entity.ProductEntity;
+import com.arrazyfathan.ecommerce.data.response.PagingInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

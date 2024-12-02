@@ -1,7 +1,7 @@
-package com.arrazyfathan.ecommerce;
+package com.arrazyfathan.ecommerce.controller;
 
-import com.arrazyfathan.ecommerce.response.BaseResponse;
-import com.arrazyfathan.ecommerce.response.Pong;
+import com.arrazyfathan.ecommerce.data.response.BaseResponse;
+import com.arrazyfathan.ecommerce.data.response.Pong;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;

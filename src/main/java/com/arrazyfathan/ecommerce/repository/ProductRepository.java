@@ -1,7 +1,7 @@
-package com.arrazyfathan.ecommerce;
+package com.arrazyfathan.ecommerce.repository;
 
 
-import com.arrazyfathan.ecommerce.entity.ProductEntity;
+import com.arrazyfathan.ecommerce.data.entity.ProductEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
