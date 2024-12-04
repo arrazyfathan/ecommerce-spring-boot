@@ -15,11 +15,5 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
 
-    @PostMapping("/register")
-    public BaseResponse register(@RequestBody RegisterRequest registerRequest) {
-        Boolean result = userService.register(registerRequest);
-        return new BaseResponse(result, "Success", result);
-    }
 }
