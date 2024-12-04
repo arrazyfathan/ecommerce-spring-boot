@@ -38,7 +38,7 @@ public class JwtUtils {
                 .getPayload();
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> resolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         final Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
     }

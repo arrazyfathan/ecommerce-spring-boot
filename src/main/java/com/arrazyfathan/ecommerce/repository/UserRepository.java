@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
-    UserEntity findByPhoneNumber(String phoneNumber);
+    Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 }

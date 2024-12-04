@@ -7,6 +7,8 @@ import com.arrazyfathan.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -14,8 +16,8 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public Boolean register(RegisterRequest registerRequest) {
-        UserEntity user = userRepository.findByPhoneNumber(registerRequest.getPhoneNumber());
-        if (user != null) {
+        Optional<UserEntity> user = userRepository.findByPhoneNumber(registerRequest.getPhoneNumber());
+        if (user.isPresent()) {
             return false;
         } else {
             try {
