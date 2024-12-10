@@ -15,17 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
+
     private final AuthService authService;
 
     @PostMapping("/register")
-    public BaseResponse register(@RequestBody RegisterRequest registerRequest) {
+    public BaseResponse postRegister(
+            @RequestBody RegisterRequest registerRequest
+    ) {
         Boolean result = authService.register(registerRequest);
         return new BaseResponse(result, "Success", result);
     }
 
     @PostMapping("/login")
-    public BaseResponse login(@RequestBody LoginRequest loginRequest) {
-        return new BaseResponse();
+    public BaseResponse postLogin(
+            @RequestBody LoginRequest loginRequest
+    ) {
+        String token = authService.login(loginRequest);
+        return new BaseResponse(true, "Success", token);
     }
 
 }

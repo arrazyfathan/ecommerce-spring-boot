@@ -20,41 +20,48 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {
-
     private final JwtUtils jwtUtils;
-    private final CustomUserDetailService customUserDetailService;
+    private final CustomUserDetailService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/v1/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
-        final String authorization = request.getHeader("Authorization");
-        final String token;
-        final String phoneNumber;
-
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        token = authorization.split(" ")[1].trim();
-        phoneNumber = jwtUtils.extractClaim(token, Claims::getSubject);
-
-        if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customUserDetailService.loadUserByUsername(phoneNumber);
-
-            if (jwtUtils.isTokenValid(token, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-                WebAuthenticationDetails webAuthenticationDetails = new WebAuthenticationDetailsSource().buildDetails(request);
-                authentication.setDetails(webAuthenticationDetails);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            if (request.getServletPath().contains("/api/v1/auth")) {
+                filterChain.doFilter(request, response);
+                return;
             }
-        }
 
-        filterChain.doFilter(request, response);
+            final String authHeader = request.getHeader("Authorization");
+            final String token;
+            final String phoneNumber;
+
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            token = authHeader.split(" ")[1].trim();
+            phoneNumber = jwtUtils.extractClaim(token, Claims::getSubject);
+
+            if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(phoneNumber.trim());
+
+                if (jwtUtils.isValidToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
+
+                    WebAuthenticationDetails webAuthenticationDetails = new WebAuthenticationDetailsSource().buildDetails(request);
+                    authenticationToken.setDetails(webAuthenticationDetails);
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            }
+
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            System.out.println("error on filter -------> " + e.getLocalizedMessage());
+        }
     }
 }

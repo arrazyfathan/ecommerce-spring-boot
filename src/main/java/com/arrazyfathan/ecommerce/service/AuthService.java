@@ -24,17 +24,20 @@ public class AuthService {
     private final JwtUtils jwtUtils;
 
     public Boolean register(RegisterRequest registerRequest) {
-        Optional<UserEntity> user = userRepository.findByPhoneNumber(registerRequest.getPhoneNumber());
-        if (user.isPresent()) {
+        Optional<UserEntity> userEntity = userRepository.findByPhoneNumber(registerRequest.getPhoneNumber());
+
+        if (userEntity.isPresent()) {
+            // save
             return false;
         } else {
+            // existing
             try {
-                UserEntity userEntity = new UserEntity();
-                userEntity.setPhoneNumber(registerRequest.getPhoneNumber());
-                userEntity.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
-                userEntity.setName(registerRequest.getName());
+                UserEntity newUserEntity = new UserEntity();
+                newUserEntity.name = registerRequest.getName();
+                newUserEntity.password = bCryptPasswordEncoder.encode(registerRequest.getPassword());
+                newUserEntity.phoneNumber = registerRequest.getPhoneNumber();
 
-                userRepository.save(userEntity);
+                userRepository.save(newUserEntity);
                 return true;
             } catch (Exception e) {
                 return false;
@@ -44,12 +47,13 @@ public class AuthService {
 
     public String login(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginRequest.getPhoneNumber(),
-                loginRequest.getPassword()
+                loginRequest.getPhoneNumber(), loginRequest.getPassword()
         );
 
         authenticationManager.authenticate(authenticationToken);
-        UserEntity userEntity = userRepository.findByPhoneNumber(loginRequest.getPhoneNumber()).orElseThrow();
+
+        UserEntity userEntity = userRepository.findByPhoneNumber(loginRequest.getPhoneNumber())
+                .orElseThrow();
 
         return jwtUtils.generateToken(userEntity);
     }

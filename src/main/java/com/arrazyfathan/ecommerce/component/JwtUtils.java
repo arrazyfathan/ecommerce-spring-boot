@@ -1,6 +1,5 @@
 package com.arrazyfathan.ecommerce.component;
 
-
 import com.arrazyfathan.ecommerce.data.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,12 +16,12 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    @Value("{jwt.secret}")
+    @Value("${jwt.secret}")
     private String secret;
 
     private SecretKey secretKey() {
-        byte[] encodedKey = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(encodedKey);
+        byte[] bytes = Decoders.BASE64URL.decode(secret);
+        return Keys.hmacShaKeyFor(bytes);
     }
 
     private Boolean isTokenExpired(String token) {
@@ -34,7 +33,7 @@ public class JwtUtils {
         return Jwts.parser()
                 .verifyWith(secretKey())
                 .build()
-                .parseEncryptedClaims(token)
+                .parseSignedClaims(token)
                 .getPayload();
     }
 
@@ -43,16 +42,16 @@ public class JwtUtils {
         return resolver.apply(claims);
     }
 
-    public Boolean isTokenValid(String token, UserDetails userDetails) {
+    public Boolean isValidToken(String token, UserDetails userDetails) {
         final String phoneNumber = extractClaim(token, Claims::getSubject);
         return phoneNumber.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    public String generateToken(UserEntity user) {
-        final long expiration = 1000L * 60 * 60 * 24;
+    public String generateToken(UserEntity userEntity) {
+        final long expiration = 1000L * 60 * 60 * 60 * 24;
         return Jwts
                 .builder()
-                .subject(user.phoneNumber)
+                .subject(userEntity.phoneNumber)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(secretKey())

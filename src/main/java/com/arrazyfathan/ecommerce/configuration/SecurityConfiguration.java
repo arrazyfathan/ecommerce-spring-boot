@@ -19,7 +19,7 @@ public class SecurityConfiguration {
 
     private static final String[] ALLOWED = {
             "/api/v1/auth/login",
-            "/api/v1/auth/register"
+            "/api/v1/auth/register",
     };
 
     private final AuthFilter authFilter;
@@ -27,13 +27,16 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(registry -> registry
-                        .requestMatchers(ALLOWED)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .sessionManagement(managementConfigurer -> managementConfigurer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(registry ->
+                        registry.requestMatchers(ALLOWED)
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                )
+                .sessionManagement(managementConfigurer ->
+                        managementConfigurer
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
 
